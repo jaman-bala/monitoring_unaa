@@ -10,14 +10,12 @@ RUN apk add --no-cache tzdata \
     zlib-dev py3-magic make \
     && rm -rf /var/apt/list/*
 
+
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
-
-# Install gunicorn
-RUN pip install gunicorn
 
 COPY . .
 
