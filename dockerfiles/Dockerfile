@@ -13,7 +13,8 @@ RUN apk add --no-cache tzdata \
     py3-numpy \
     cmake \
     libressl-dev \
-    libffi-dev
+    libffi-dev \
+
 
 WORKDIR /app
 
