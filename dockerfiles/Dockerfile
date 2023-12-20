@@ -3,17 +3,21 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV TZ=Asia/Bishkek
 
-RUN apk add --no-cache jpeg-dev \
-    gcc postgresql-dev \
+RUN apk add --no-cache tzdata \
+    jpeg-dev gcc postgresql-dev \
     linux-headers musl-dev libffi-dev \
     libxml2-dev libxslt-dev imagemagick-dev \
-    zlib-dev py3-magic  make \
+    zlib-dev py3-magic make \
     && rm -rf /var/apt/list/*
+
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
+
+# Install gunicorn
+RUN pip install gunicorn
 
 COPY . .
 
