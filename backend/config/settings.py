@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -8,9 +7,8 @@ SECRET_KEY = 'django-insecure-rimx^u#tvrnmitid41u4*v9c&=($e2m8d@l5y+ozw(=y3+eh+q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-DEBUG = False
-ALLOWED_HOSTS = ["192.168.56.68"]
-# ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["192.168.56.68"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -103,7 +101,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, '/static')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # MEDIA
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
