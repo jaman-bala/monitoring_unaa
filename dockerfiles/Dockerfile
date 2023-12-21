@@ -7,8 +7,12 @@ RUN apk add --no-cache build-base \
     gcc postgresql-dev \
     linux-headers musl-dev libffi-dev \
     libxml2-dev libxslt-dev imagemagick-dev \
-    zlib-dev py3-magic  make \
+    zlib-dev py3-magic make \
     && rm -rf /var/apt/list/*
+
+# Установка Gunicorn
+RUN pip install --upgrade pip && pip install gunicorn
+
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
