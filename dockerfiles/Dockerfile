@@ -7,7 +7,7 @@ RUN apk add --no-cache build-base \
     gcc postgresql-dev \
     linux-headers musl-dev libffi-dev \
     libxml2-dev libxslt-dev imagemagick-dev \
-    zlib-dev py3-magic make \
+    zlib-dev py3-magic make python3-dev \  # Добавленный пакет
     && rm -rf /var/apt/list/*
 
 # Установка Gunicorn
