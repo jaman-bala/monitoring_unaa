@@ -3,8 +3,8 @@ import httpx
 
 
 class Camera(models.Model):
-    title = models.CharField('Название камеры', max_length=255, db_index=True)
-    url = models.URLField('Вставьте ссылку', db_index=True)
+    title = models.CharField("Название камеры", max_length=255, db_index=True)
+    url = models.URLField("Вставьте ссылку", db_index=True)
 
     def __str__(self):
         return self.title
