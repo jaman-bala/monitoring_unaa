@@ -1,9 +1,8 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from asgiref.sync import sync_to_async
-import asyncio
 
-from ping3 import ping
+import asyncio
 import httpx
 
 from .models import Camera

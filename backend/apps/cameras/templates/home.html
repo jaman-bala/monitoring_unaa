@@ -93,33 +93,33 @@
     </div>
 </div>
 
-<!--<script>-->
-<!--    var ctx = document.getElementById('statusChart').getContext('2d');-->
-<!--        var myChart = new Chart(ctx, {-->
-<!--            type: 'doughnut',-->
-<!--            data: {-->
-<!--                labels: ['ONLINE', 'OFFLINE'],-->
-<!--                datasets: [{-->
-<!--                    data: [-->
-<!--                        {{ online_count }},-->
-<!--                        {{ offline_count }}-->
-<!--                    ],-->
-<!--                    backgroundColor: [-->
-<!--                        'rgba(0, 191, 255, 0.7)',-->
-<!--                        'rgba(255, 0, 0, 0.7)',-->
-<!--                    ],-->
-<!--                    borderColor: [-->
-<!--                        'rgba(0, 191, 255, 0.7)',-->
-<!--                        'rgba(255, 0, 0, 0.7)',-->
-<!--                    ],-->
-<!--                    borderWidth: 1-->
-<!--                }]-->
-<!--            },-->
-<!--            options: {-->
-<!--                cutout: '80%',-->
-<!--            }-->
-<!--        });-->
-<!--</script>-->
+<script>
+    var ctx = document.getElementById('statusChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['ONLINE', 'OFFLINE'],
+                datasets: [{
+                    data: [
+                        {{ online_count }},
+                        {{ offline_count }}
+                    ],
+                    backgroundColor: [
+                        'rgba(0, 191, 255, 0.7)',
+                        'rgba(255, 0, 0, 0.7)',
+                    ],
+                    borderColor: [
+                        'rgba(0, 191, 255, 0.7)',
+                        'rgba(255, 0, 0, 0.7)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                cutout: '80%',
+            }
+        });
+</script>
 <script src="{% static './src/js/index.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
