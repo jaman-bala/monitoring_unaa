@@ -1,10 +1,14 @@
 from django.db import models
+
+# from colorfield.fields import ColorField
+
 import httpx
 
 
 class Camera(models.Model):
     title = models.CharField("Название камеры", max_length=255, db_index=True)
     url = models.URLField("Вставьте ссылку", db_index=True)
+    # color = ColorField(default="#FF0000")
 
     def __str__(self):
         return self.title
