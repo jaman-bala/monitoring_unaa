@@ -4,10 +4,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-# ALLOWED_HOSTS = ["http://monitoring.unaa.kg"]
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["http://monitoring.tsvs.kg"]
+# ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
