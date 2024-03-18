@@ -2,8 +2,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = "django-insecure-rimx^u#tvrnmitid41u4*v9c&=($e2m8d@l5y+ozw(=y3+eh+q"
-
+SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -20,6 +19,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # APP
     "backend.apps.cameras",
     # "colorfield",
 ]
@@ -58,16 +58,20 @@ WSGI_APPLICATION = "backend.config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.Monitoring"),
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": os.path.join(BASE_DIR, "db.Monitoring"),
+#     }
+# }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+POSTGRES_DB = os.environ.get("POSTGRES_DB")
+POSTGRES_USER = os.environ.get("POSTGRES_USER")
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+POSTGRES_HOST = os.environ.get("POSTGRES_HOST")
+POSTGRES_PORT = os.environ.get("POSTGRES_PORT")
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -101,11 +105,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "/static")
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+# Уберем STATIC_ROOT из STATICFILES_DIRS
+# Указывайте только папку, где хранятся ваши статические файлы, без полного пути к ней
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "backend/static")]
+
+ADMIN_MEDIA_PREFIX = "/static/admin/"
 
 # MEDIA
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
 MEDIA_URL = "/media/"
 
 # Default primary key field type

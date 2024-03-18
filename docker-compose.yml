@@ -1,7 +1,7 @@
-version: "3.7"
+version: "3.8"
 
 services:
-  monitoring_app:
+  app:
     container_name: monitoring_app
     restart: always
     build:
@@ -10,9 +10,25 @@ services:
     command: run
     volumes:
       - ./media:/app/media
-      - ./static:/app/static
-    env_file: .env
+      - ./static:/app/backend/static
+    env_file: .env.example
     ports:
       - 127.0.0.1:8000:8000
+    links:
+      - db
+    depends_on:
+        - db
+
+  db:
+    container_name: db
+    restart: always
+    image: postgres:12.4-alpine
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
+    env_file: .env.example
+    expose:
+      - 5432
+
 volumes:
-  unaa-data:
+  postgres-data:
+  static:
