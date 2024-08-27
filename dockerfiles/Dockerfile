@@ -3,15 +3,23 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV TZ=Asia/Bishkek
 
-RUN apk add --no-cache build-base \
-    gcc postgresql-dev \
-    linux-headers musl-dev libffi-dev \
-    libxml2-dev libxslt-dev imagemagick-dev \
-    zlib-dev py3-magic make make python3-dev \
-    && rm -rf /var/apt/list/*
+RUN apk add --no-cache \
+    build-base \
+    postgresql-dev \
+    libffi-dev \
+    libxml2-dev \
+    libxslt-dev \
+    imagemagick-dev \
+    zlib-dev \
+    file \
+    make \
+    python3-dev \
+    && rm -rf /var/cache/apk/*
 
-# Установка Gunicorn
-RUN pip install --upgrade pip && pip install gunicorn
+# Добавляем инструменты для компиляции Rust
+RUN apk add --no-cache rust cargo
+
+RUN pip install --upgrade pip && pip install uvicorn
 
 WORKDIR /app
 
