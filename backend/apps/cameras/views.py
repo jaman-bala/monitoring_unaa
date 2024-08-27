@@ -5,6 +5,7 @@ from typing import List
 
 from backend.apps.cameras.models import CameraModels
 from backend.apps.cameras.models import CategoryModels
+from backend.apps.cameras.models import RegionModels
 from backend.apps.cameras.utils import get_cameras_with_ping
 from backend.apps.cameras.utils import check_ping
 from backend.apps.cameras.schemas import CameraOutput
@@ -20,9 +21,9 @@ async def get_categories(request: HttpRequest):
     return qs
 
 
-@router.get("regions", response=List[RegionSchemas])
+@router.get("/regions", response=List[RegionSchemas])
 async def get_regions(request: HttpRequest):
-    qs = await sync_to_async(list)(RegionSchemas.objects.all())
+    qs = await sync_to_async(list)(RegionModels.objects.all())
     return qs
 
 
