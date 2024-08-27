@@ -114,11 +114,8 @@ NINJA_API_URL = '/api/'
 STATIC_URL = '/static/'
 
 # для сервера
-# Папка для сбора статических файлов
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Дополнительные директории для статических файлов
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'backend', 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'backend', 'static')
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # MEDIA
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")

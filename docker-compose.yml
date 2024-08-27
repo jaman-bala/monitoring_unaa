@@ -9,8 +9,8 @@ services:
       dockerfile: dockerfiles/Dockerfile
     command: run
     volumes:
-      - /opt/backend/media:/app/backend/media
-      - /opt/backend/static:/app/backend/static
+      - /opt/backend/backend/media:/app/backend/media
+      - /opt/backend/backend/static:/app/backend/static
     env_file: .env.example
     ports:
       - 127.0.0.1:8000:8000
