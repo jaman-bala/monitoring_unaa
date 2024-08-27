@@ -14,15 +14,22 @@ RUN apk add --no-cache \
     file \
     make \
     python3-dev \
+    jpeg-dev \
+    musl-dev \
+    gcc \
+    g++ \
+    libgcc \
+    libjpeg-turbo-dev \
     && rm -rf /var/cache/apk/*
 
-# Установка Gunicorn
-RUN pip install --upgrade pip && pip install uvicorn
+# Install Gunicorn and other dependencies
+RUN pip install --upgrade pip && pip install uvicorn gunicorn
 
 WORKDIR /app
 
 COPY requirements.txt requirements.txt
 
+# Install Python dependencies
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . .
