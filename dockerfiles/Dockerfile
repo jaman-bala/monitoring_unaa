@@ -1,26 +1,28 @@
-FROM python:3.11-alpine
+FROM python:3.11-slim
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV TZ=Asia/Bishkek
-
+# Install system dependencies
 RUN apk add --no-cache \
     build-base \
     libffi-dev \
-    libssl-dev \
+    openssl-dev \
     && rm -rf /var/cache/apk/*
 
-RUN pip install --upgrade pip
-RUN pip cache purge
-
+# Set working directory to /app
 WORKDIR /app
 
+# Copy requirements file
 COPY requirements.txt requirements.txt
 
-RUN pip install --no-binary :all: cryptography
-RUN pip install -r requirements.txt
+# Install Python dependencies
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
+# Copy rest of the application code
 COPY . .
 
+# Expose port
 EXPOSE 8000
 
+# Run command
 ENTRYPOINT ["sh", "./dockerfiles/docker-entrypoint.sh"]
