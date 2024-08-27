@@ -76,7 +76,7 @@ os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("POSTGRES_DB", default="db_monitoring"),
+        "NAME": os.getenv("POSTGRES_DB", default="db"),
         "USER": os.getenv("POSTGRES_USER", default="monitoring_db"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", default="ZAQ12345tgb"),
         "HOST": os.getenv("POSTGRES_HOST", default="127.0.0.1"),
