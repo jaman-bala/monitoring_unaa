@@ -2,11 +2,19 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ["*"]
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://dev-monitoring.tsvs.kg'
+]
+CORS_ALLOWED_ORIGINS = [
+    "https://monitoring.tsvs.kg",
+    "https://www.monitoring.tsvs.kg",
+    "http://localhost:3000",
+]
 
 # Application definition
 
@@ -17,9 +25,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     # APP
     "backend.apps.cameras",
-    # "colorfield",
+
 ]
 
 MIDDLEWARE = [
@@ -52,18 +61,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.config.wsgi.application"
 
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.test'),
+#     }
+# }
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("POSTGRES_DB", default="db"),
-        "USER": os.getenv("POSTGRES_USER", default="posgres_db"),
+        "NAME": os.getenv("POSTGRES_DB", default="db_monitoring"),
+        "USER": os.getenv("POSTGRES_USER", default="monitoring_db"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", default="ZAQ12345tgb"),
-        "HOST": os.getenv("POSTGRES_HOST", default="127.0.0.1"),
+        "HOST": os.getenv("POSTGRES_HOST", default="10.11.13.159"),
         "PORT": os.getenv("POSTGRES_PORT", default="5432"),
     }
 }
@@ -88,32 +104,21 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = "RU-ru"
 
-TIME_ZONE = "Asia/Bishkek"
-
+LANGUAGE_CODE = 'ru'
+TIME_ZONE = 'Asia/Bishkek'
 USE_I18N = True
-
 USE_TZ = True
 
+NINJA_API_URL = '/api/'
+STATIC_URL = '/static/'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
-# Уберем STATIC_ROOT из STATICFILES_DIRS
-# Указывайте только папку, где хранятся ваши статические файлы, без полного пути к ней
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, "backend/static")]
-
-ADMIN_MEDIA_PREFIX = "/static/admin/"
+# для сервера
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 # MEDIA
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media")
-MEDIA_URL = "/media/"
+MEDIA_URL = '/media/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

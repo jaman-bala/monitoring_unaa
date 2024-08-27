@@ -1,66 +1,50 @@
-from django.shortcuts import render
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from ninja import Router
+from django.http import HttpRequest
 from asgiref.sync import sync_to_async
+from typing import List
 
-import asyncio
-import httpx
+from backend.apps.cameras.models import CameraModels
+from backend.apps.cameras.models import CategoryModels
+from backend.apps.cameras.utils import get_cameras_with_ping
+from backend.apps.cameras.utils import check_ping
+from backend.apps.cameras.schemas import CameraOutput
+from backend.apps.cameras.schemas import CategorySchemas
+from backend.apps.cameras.schemas import RegionSchemas
 
-from .models import Camera
+router = Router()
 
 
-async def get_cameras_with_ping():
-    cameras = await sync_to_async(list)(Camera.objects.all().select_related())
+@router.get("/categories", response=List[CategorySchemas])
+async def get_categories(request: HttpRequest):
+    qs = await sync_to_async(list)(CategoryModels.objects.all())
+    return qs
 
-    async def check_ping(camera):
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.get(camera.url)
-            if response.status_code == 200:
-                return round(
-                    response.elapsed.total_seconds() * 100
-                )  # Преобразуем миллисекунды в проценты
-            else:
-                return 0
-        except httpx.HTTPError:
-            return f'{"error 0"}'
 
-    tasks = [check_ping(camera) for camera in cameras]
-    ping_results = await asyncio.gather(*tasks)
+@router.get("regions", response=List[RegionSchemas])
+async def get_regions(request: HttpRequest):
+    qs = await sync_to_async(list)(RegionSchemas.objects.all())
+    return qs
 
-    for camera, ping_result in zip(cameras, ping_results):
-        camera.ping_status = ping_result
 
+@router.get("/cameras", response=List[CameraOutput])
+async def get_cameras(request: HttpRequest):
+    cameras = await get_cameras_with_ping()
     return cameras
 
 
-async def home_view(request):
-    cameras = await get_cameras_with_ping()
-    online_count = 0
-    offline_count = 0
-    total_count = len(cameras)
-    tasks = [camera.check_status_async() for camera in cameras]
-    statuses = await asyncio.gather(*tasks)
-    for camera, status in zip(cameras, statuses):
-        camera.status = status
-        if camera.status == "Online":
-            online_count += 1
-        else:
-            offline_count += 1
-
-    page = request.GET.get("page", 1)
-    paginator = Paginator(cameras, 15)  # Показывать 15 камер на странице
-
-    try:
-        cameras = paginator.page(page)
-    except PageNotAnInteger:
-        cameras = paginator.page(1)
-    except EmptyPage:
-        cameras = paginator.page(paginator.num_pages)
-
-    context = {
-        "cameras": cameras,
-        "online_count": online_count,
-        "offline_count": offline_count,
-        "total_count": total_count,
-    }
-    return render(request, "home.html", context)
+@router.get("/cameras/{camera_id}", response=CameraOutput)
+async def get_camera(request: HttpRequest, camera_id: int):
+    camera = await sync_to_async(CameraModels.objects.select_related('category').get)(id=camera_id)
+    ping_status = await check_ping(camera)
+    status = await camera.check_status_async()
+    category_data = CategorySchemas.from_orm(camera.category)
+    region_data = RegionSchemas.from_orm(camera.region)
+    return CameraOutput(
+        id=camera.id,
+        title=camera.title,
+        url=camera.url,
+        status=status,
+        ping_status=ping_status,
+        category=category_data,
+        region=region_data,
+    )
