@@ -1,51 +1,31 @@
 FROM python:3.9-alpine3.12
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV TZ=Asia/Bishkek
 
-# Устанавливаем зависимости для сборки
 RUN apk add --no-cache \
-        build-base \
-        gcc \
-        g++ \
-        git \
-        python3-dev \
-        libffi-dev \
-        openssl-dev \
-        postgresql-dev \
-        jpeg-turbo-dev \
-        zlib-dev \
-        libxml2-dev \
-        libxslt-dev \
-        libpqxx-dev \
-        musl-dev \
-        libc-dev \
-        linux-headers \
-        curl \
-        wget \
-        bash \
-        openssh-client \
-        sudo \
-        ca-certificates \
-        && rm -rf /var/cache/apk/*
+    build-base \
+    postgresql-dev \
+    libffi-dev \
+    libxml2-dev \
+    libxslt-dev \
+    imagemagick-dev \
+    zlib-dev \
+    file \
+    make \
+    python3-dev \
+    && rm -rf /var/cache/apk/*
 
-# Устанавливаем зависимости из requirements.txt
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Создаем рабочую директорию и копируем исходный код
+RUN pip install --upgrade pip && pip install uvicorn
+
 WORKDIR /app
+
+COPY requirements.txt requirements.txt
+
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
 COPY . .
-
-# Компиляция и установка Python пакетов
-RUN pip install --no-cache-dir -r requirements.txt
-
-
-# Добавляем переменные окружения
-ENV PYTHONUNBUFFERED=1
-ENV LANG=C.UTF-8
-ENV LC_ALL=C.UTF-8
-
-# Устанавливаем Gunicorn
-RUN pip install gunicorn
-
 
 EXPOSE 8000
 
