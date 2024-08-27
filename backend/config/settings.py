@@ -13,7 +13,7 @@ CSRF_TRUSTED_ORIGINS = [
 CORS_ALLOWED_ORIGINS = [
     "https://monitoring.tsvs.kg",
     "https://www.monitoring.tsvs.kg",
-    "http://localhost:3000",
+    "http://localhost:5173",
 ]
 
 # Application definition
