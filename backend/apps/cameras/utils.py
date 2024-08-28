@@ -10,14 +10,26 @@ from backend.apps.cameras.schemas import RegionSchemas
 
 async def check_ping(camera):
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(camera.url)
+        async with httpx.AsyncClient(verify=False) as client:
+            url = camera.url
+            if url.startswith('http://'):
+                url_https = url.replace('http://', 'https://')
+            else:
+                url_https = url
+            response = await client.get(url_https)
         if response.status_code == 200:
             return round(response.elapsed.total_seconds() * 100)
-        else:
-            return 0
-    except httpx.HTTPError:
-        return 0
+
+    except httpx.RequestError:
+        try:
+            async with httpx.AsyncClient(verify=False) as client:
+                response = await client.get(url)
+            if response.status_code == 200:
+                return round(response.elapsed.total_seconds() * 100)
+        except httpx.RequestError:
+            pass
+
+    return 0
 
 
 async def get_cameras_with_ping():
