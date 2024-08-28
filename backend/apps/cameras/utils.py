@@ -16,16 +16,19 @@ async def check_ping(camera):
                 url_https = url.replace('http://', 'https://')
             else:
                 url_https = url
+
+            # Пробуем соединиться с HTTPS
             response = await client.get(url_https)
-        if response.status_code == 200:
-            return round(response.elapsed.total_seconds() * 100)
+            if response.status_code == 200:
+                return round(response.elapsed.total_seconds() * 100)
 
     except httpx.RequestError:
+        # Пробуем соединиться с HTTP
         try:
             async with httpx.AsyncClient(verify=False) as client:
                 response = await client.get(url)
-            if response.status_code == 200:
-                return round(response.elapsed.total_seconds() * 100)
+                if response.status_code == 200:
+                    return round(response.elapsed.total_seconds() * 100)
         except httpx.RequestError:
             pass
 
@@ -53,3 +56,4 @@ async def get_cameras_with_ping():
         results.append(camera_output)
 
     return results
+
