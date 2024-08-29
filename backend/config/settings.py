@@ -36,8 +36,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://monitoring.tsvs.kg",
-    "https://www.monitoring.tsvs.kg",
+    "https://byrkyt.tsvs.kg",
+    "https://www.byrkyt.tsvs.kg",
     "http://localhost:5173/",
 ]
 
