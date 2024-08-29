@@ -81,10 +81,8 @@ DATABASES = {
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", default="db_ZAQ12345tgb*"),
         "HOST": os.getenv("POSTGRES_HOST", default="127.0.0.1"),
         "PORT": os.getenv("POSTGRES_PORT", default="5432"),
-        'CONN_MAX_AGE': 60,  # Установка времени жизни соединения (в секундах)
-        'OPTIONS': {
-            'MAX_CONNS': 200,  # Максимальное количество соединений для пула
-        },
+        'CONN_MAX_AGE': 60,
+
     }
 }
 
