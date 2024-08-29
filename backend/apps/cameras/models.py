@@ -1,6 +1,6 @@
 from django.db import models
 
-import httpx
+import requests
 
 
 class CategoryModels(models.Model):
@@ -51,16 +51,19 @@ class CameraModels(models.Model):
     def __str__(self):
         return self.title
 
-    async def check_status_async(self):
+    def check_status_sync(self):
         try:
-            async with httpx.AsyncClient() as client:
-                response = await client.get(self.url)
+            response = requests.get(self.url, timeout=5)
             if response.status_code == 200:
                 return "Online"
             else:
                 return "Offline"
-        except httpx.HTTPError:
+        except requests.RequestException:
             return "Offline"
+
+    class Meta:
+        verbose_name = "Добавить"
+        verbose_name_plural = "Добавить Камеру"
 
     class Meta:
         verbose_name = "Добавить"

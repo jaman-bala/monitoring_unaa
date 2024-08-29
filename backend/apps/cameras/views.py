@@ -16,28 +16,25 @@ router = Router()
 
 
 @router.get("/categories", response=List[CategorySchemas])
-async def get_categories(request: HttpRequest):
-    qs = await sync_to_async(list)(CategoryModels.objects.all())
+def get_categories(request: HttpRequest):
+    qs = list(CategoryModels.objects.all())
     return qs
-
 
 @router.get("/regions", response=List[RegionSchemas])
-async def get_regions(request: HttpRequest):
-    qs = await sync_to_async(list)(RegionModels.objects.all())
+def get_regions(request: HttpRequest):
+    qs = list(RegionModels.objects.all())
     return qs
 
-
 @router.get("/cameras", response=List[CameraOutput])
-async def get_cameras(request: HttpRequest):
-    cameras = await get_cameras_with_ping()
+def get_cameras(request: HttpRequest):
+    cameras = get_cameras_with_ping()
     return cameras
 
-
 @router.get("/cameras/{camera_id}", response=CameraOutput)
-async def get_camera(request: HttpRequest, camera_id: int):
-    camera = await sync_to_async(CameraModels.objects.select_related('category').get)(id=camera_id)
-    ping_status = await check_ping(camera)
-    status = await camera.check_status_async()
+def get_camera(request: HttpRequest, camera_id: int):
+    camera = CameraModels.objects.select_related('category').get(id=camera_id)
+    ping_status = check_ping(camera)
+    status = camera.check_status_sync()
     category_data = CategorySchemas.from_orm(camera.category)
     region_data = RegionSchemas.from_orm(camera.region)
     return CameraOutput(
