@@ -6,9 +6,8 @@ from backend.apps.cameras.schemas import CameraOutput, CategorySchemas, RegionSc
 
 # Настройка семафора для ограничения одновременных запросов
 SEMAPHORE_LIMIT = 10
-semaphore = asyncio.Semaphore(SEMAPHORE_LIMIT)
 
-async def check_ping(camera):
+async def check_ping(camera, semaphore):
     async with semaphore:
         try:
             async with httpx.AsyncClient(verify=False) as client:
@@ -33,17 +32,18 @@ async def check_ping(camera):
             except httpx.RequestError:
                 pass
 
-        return 0
+    return 0
 
 async def get_cameras_with_ping():
-    # Использование кеша для хранения камер
+    # Создание семафора внутри функции, чтобы использовать его в одном и том же loop
+    semaphore = asyncio.Semaphore(SEMAPHORE_LIMIT)
+
     cameras = await sync_to_async(list)(CameraModels.objects.select_related('category').all())
-    tasks = [check_ping(camera) for camera in cameras]
+    tasks = [check_ping(camera, semaphore) for camera in cameras]
     ping_results = await asyncio.gather(*tasks)
 
     results = []
     for camera, ping_result in zip(cameras, ping_results):
-        # Использование кешированных данных
         category_data = CategorySchemas.from_orm(camera.category)
         region_data = RegionSchemas.from_orm(camera.region)
         camera_output = CameraOutput(
