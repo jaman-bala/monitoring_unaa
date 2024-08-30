@@ -2,6 +2,7 @@ import requests
 from backend.apps.cameras.models import CameraModels
 from backend.apps.cameras.schemas import CameraOutput, CategorySchemas, RegionSchemas
 
+
 def check_ping(camera):
     url = camera.url
     try:
@@ -16,7 +17,6 @@ def check_ping(camera):
             return round(response.elapsed.total_seconds() * 100)
 
     except requests.RequestException:
-        # Пробуем соединиться с HTTP
         try:
             response = requests.get(url, timeout=5)
             if response.status_code == 200:
@@ -25,6 +25,7 @@ def check_ping(camera):
             pass
 
     return 0
+
 
 def get_cameras_with_ping():
     cameras = list(CameraModels.objects.select_related('category').all())

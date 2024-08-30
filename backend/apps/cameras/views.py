@@ -1,6 +1,5 @@
 from ninja import Router
 from django.http import HttpRequest
-from asgiref.sync import sync_to_async
 from typing import List
 
 from backend.apps.cameras.models import CameraModels
@@ -20,15 +19,18 @@ def get_categories(request: HttpRequest):
     qs = list(CategoryModels.objects.all())
     return qs
 
+
 @router.get("/regions", response=List[RegionSchemas])
 def get_regions(request: HttpRequest):
     qs = list(RegionModels.objects.all())
     return qs
 
+
 @router.get("/cameras", response=List[CameraOutput])
 def get_cameras(request: HttpRequest):
     cameras = get_cameras_with_ping()
     return cameras
+
 
 @router.get("/cameras/{camera_id}", response=CameraOutput)
 def get_camera(request: HttpRequest, camera_id: int):
