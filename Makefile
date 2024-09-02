@@ -6,7 +6,7 @@ migrate:
 .PHONY: run
 run: migrate collectstatic clean
 	@echo "Running server..."
-	gunicorn -w 4 --bind 0.0.0.0:8000 backend.config.wsgi --reload
+	gunicorn -w 4 --bind 0.0.0.0:8000 backend.config.wsgi --reload --timeout 120
 
 
 .PHONY: collectstatic
