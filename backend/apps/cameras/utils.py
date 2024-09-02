@@ -1,6 +1,11 @@
 import requests
+from django.core.cache import cache
 from backend.apps.cameras.models import CameraModels
 from backend.apps.cameras.schemas import CameraOutput, CategorySchemas, RegionSchemas
+
+
+def get_ping_status(camera):
+    return check_ping(camera)
 
 
 def check_ping(camera):
@@ -28,6 +33,12 @@ def check_ping(camera):
 
 
 def get_cameras_with_ping():
+    cache_key = 'cameras_with_ping'
+    cached_data = cache.get(cache_key)
+
+    if cached_data:
+        return cached_data
+
     cameras = list(CameraModels.objects.select_related('category').all())
     results = []
     for camera in cameras:
@@ -45,4 +56,5 @@ def get_cameras_with_ping():
         )
         results.append(camera_output)
 
+    cache.set(cache_key, results, timeout=60*5)  # кэшировать на 5 минут
     return results
