@@ -1,4 +1,3 @@
-from typing import Optional
 from ninja import Schema
 
 
@@ -37,8 +36,8 @@ class CameraOutput(Schema):
     id: int = None
     title: str = None
     url: str = None
-    ping_status: Optional[int] = None
     status: str = None
+    ping_status: int = None
 
     class Config:
         from_attributes = True
