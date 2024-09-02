@@ -1,36 +1,12 @@
-import requests
 from django.core.cache import cache
 from backend.apps.cameras.models import CameraModels
 from backend.apps.cameras.schemas import CameraOutput, CategorySchemas, RegionSchemas
+from backend.apps.cameras.ping_utils import check_ping
 from backend.apps.cameras.tasks import async_check_ping
 
 
 def get_ping_status(camera):
     return check_ping(camera)
-
-
-def check_ping(camera):
-    url = camera.url
-    try:
-        if url.startswith('http://'):
-            url_https = url.replace('http://', 'https://')
-        else:
-            url_https = url
-
-        # Пробуем соединиться с HTTPS
-        response = requests.get(url_https, timeout=5)
-        if response.status_code == 200:
-            return round(response.elapsed.total_seconds() * 100)
-
-    except requests.RequestException:
-        try:
-            response = requests.get(url, timeout=5)
-            if response.status_code == 200:
-                return round(response.elapsed.total_seconds() * 100)
-        except requests.RequestException:
-            pass
-
-    return 0
 
 
 def get_cameras_with_ping():

@@ -1,6 +1,6 @@
 from celery import shared_task
 from backend.apps.cameras.models import CameraModels
-from backend.apps.cameras.utils import check_ping
+from backend.apps.cameras.ping_utils import check_ping
 
 
 @shared_task
