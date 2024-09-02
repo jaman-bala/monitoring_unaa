@@ -38,7 +38,10 @@ def get_cameras_with_ping():
     # Обновляем ping_status в уже готовых results
     for result in results:
         task = ping_results[result.id]
-        result.ping_status = task.get(timeout=10)
+        try:
+            result.ping_status = task.get(timeout=10) or 0  # Установите значение по умолчанию, если None
+        except Exception as e:
+            result.ping_status = 0  # Устанавливаем значение по умолчанию при ошибке
 
     cache.set(cache_key, results, timeout=60*5)  # кэшировать на 5 минут
     return results
